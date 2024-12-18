@@ -63,7 +63,15 @@ public class UserManager {
         validInput = false;
 
         System.out.println("Enter your gender (Male/Female):");
-        gender = scanner.nextLine();
+        do{
+            gender=scanner.nextLine();
+            if(gender.equalsIgnoreCase("Male"))
+                break;
+            else if (gender.equalsIgnoreCase("Female"))
+                break;
+            else
+                System.out.println("Invalid input");
+        }while(true);
 
         System.out.println("Enter your Specialization: ");
         Specialization = scanner.nextLine();

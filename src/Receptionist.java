@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.*;
 public class Receptionist extends Users{
     Scanner scanner=new Scanner(System.in);
@@ -21,7 +22,19 @@ public class Receptionist extends Users{
         System.out.println("1: Email");
         System.out.println("2: Phone Number");
         System.out.println("3: Weight and Height");
-        this.choice=scanner.nextInt();
+        this.choice=0;
+        boolean validInput=false;
+        while (!validInput) {
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();// Attempt to read an integer
+                validInput = true; // Input is valid, exit the loop
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! That's not an integer.");
+                scanner.next(); // Clear the invalid input from the buffer
+            }
+        }
+        validInput = false;
         while (a){
             switch (choice){
                 case 1:
@@ -68,9 +81,20 @@ public class Receptionist extends Users{
                 doctor.appointments.displaySchedule(day); // Display time slots for each day
             }
         }
-        System.out.println("Enter patient's id to book appointment:");
-        int patid=scanner.nextInt();
-        scanner.nextLine();
+        int patid=0;
+        boolean validInput=false;
+        while (!validInput) {
+            System.out.println("Enter patient's id to cancel an appointment:");
+            try {
+                patid = scanner.nextInt();
+                scanner.nextLine();// Attempt to read an integer
+                validInput = true; // Input is valid, exit the loop
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! That's not an integer.");
+                scanner.next(); // Clear the invalid input from the buffer
+            }
+        }
+        validInput = false;
         for (Patients patients1:patients){
             if (patients1.getId()==patid){
                 System.out.println("Enter doctor's name: ");
@@ -80,7 +104,7 @@ public class Receptionist extends Users{
                     String day = scanner.nextLine();
                     System.out.print("Enter the hour to book: ");
                     int hour = scanner.nextInt();
-                    doctor.appointments.bookAppointment(day,hour);
+                    doctor.appointments.bookAppointment(day,hour, patid);
                 }
                 break;
             }
@@ -97,48 +121,66 @@ public class Receptionist extends Users{
                 doctor.appointments.displaySchedule(day); // Display time slots for each day
             }
         }
-        System.out.println("Enter patient's id to cancel an appointment:");
-        int patid=scanner.nextInt();
-        scanner.nextLine();
-        for (Patients patients1:patients){
-            if(patients1.getId()==patid){
-                System.out.println("Enter doctor's name to cancel appointment: ");
-                String docname = scanner.nextLine();
 
-                // Ask for the day and hour of the appointment to cancel
-                System.out.print("Enter the day of the appointment to cancel: ");
-                String day = scanner.nextLine();
+        boolean a=true;
 
-                System.out.print("Enter the hour of the appointment to cancel: ");
-                int hour = scanner.nextInt();
-                scanner.nextLine();  // Consume the newline
+        while (a){
+            int patid=0;
+            boolean validInput=false;
+            while (!validInput) {
+                System.out.println("Enter patient's id to cancel an appointment:");
+                try {
+                    patid = scanner.nextInt();
+                    scanner.nextLine();// Attempt to read an integer
+                    validInput = true; // Input is valid, exit the loop
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! That's not an integer.");
+                    scanner.next(); // Clear the invalid input from the buffer
+                }
+            }
+            validInput = false;
 
-                // Iterate through the list of doctors
-                for (Doctor doctor : doctors) {
-                    if (doctor.First_name.equals(docname)) {
-                        // Find the day in the doctor's schedule
-                        List<TimeSlot> timeSlots = doctor.appointments.schedule.get(day.toLowerCase());
-                        if (timeSlots != null) {
-                            // Find the time slot to cancel
-                            for (TimeSlot slot : timeSlots) {
-                                if (slot.getHour() == hour && slot.isBooked()) {
-                                    // Cancel the appointment by unbooking the slot
-                                    slot.cancel();
-                                    System.out.println("Appointment with Dr. " + docname + " on " + day + " at " + hour + ":00 has been canceled.");
-                                    return;  // Exit after successful cancellation
+            for (Patients patients1:patients) {
+                if (patients1.getId() == patid) {
+                    System.out.println("Enter doctor's name to cancel appointment: ");
+                    String docname = scanner.nextLine();
+
+                    // Ask for the day and hour of the appointment to cancel
+                    System.out.print("Enter the day of the appointment to cancel: ");
+                    String day = scanner.nextLine();
+
+                    System.out.print("Enter the hour of the appointment to cancel: ");
+                    int hour = scanner.nextInt();
+                    scanner.nextLine();  // Consume the newline
+
+                    // Iterate through the list of doctors
+                    for (Doctor doctor : doctors) {
+                        if (doctor.First_name.equals(docname)) {
+                            // Find the day in the doctor's schedule
+                            List<TimeSlot> timeSlots = doctor.appointments.schedule.get(day.toLowerCase());
+                            if (timeSlots != null) {
+                                // Find the time slot to cancel
+                                for (TimeSlot slot : timeSlots) {
+                                    if (slot.getHour() == hour && slot.isBooked() && patid == slot.appointmentId) {
+                                        // Cancel the appointment by unbooking the slot
+                                        slot.cancel();
+                                        System.out.println("Appointment with Dr. " + docname + " on " + day + " at " + hour + ":00 has been canceled.");
+                                        return;  // Exit after successful cancellation
+                                    }
                                 }
+                                System.out.println("No booked appointment found for " + hour + ":00 on " + day + "for the patient with the id " + patid + ".");
+                                return;
+                            } else {
+                                System.out.println("No schedule available for " + day + ".");
+                                return;
                             }
-                            System.out.println("No booked appointment found for " + hour + ":00 on " + day + ".");
-                            return;
-                        } else {
-                            System.out.println("No schedule available for " + day + ".");
-                            return;
                         }
                     }
+                    System.out.println("Doctor with name " + docname + " not found.");
+                    break;
                 }
-                System.out.println("Doctor with name " + docname + " not found.");
-                break;
             }
+            System.out.println("couldn't find patient id, please try again.");
         }
     }
     public int getId(){

@@ -96,9 +96,7 @@ public class Patients extends Users{
         scanner.nextLine(); // Consume newline
         for(Doctor doctor:doctors){
             if(doctor.First_name.equals(docname)){
-                doctor.appointments.bookAppointment(day,hour);
-                doctor.appointments.appId = this.id;
-
+                doctor.appointments.bookAppointment(day,hour, this.id);
             }
         }
     }
@@ -124,14 +122,14 @@ public class Patients extends Users{
                 if (timeSlots != null) {
                     // Find the time slot to cancel
                     for (TimeSlot slot : timeSlots) {
-                        if (slot.getHour() == hour && slot.isBooked() && this.id == doctor.appointments.appId){
+                        if (slot.getHour() == hour && slot.isBooked() && this.id == slot.appointmentId){
                             // Cancel the appointment by unbooking the slot
                             slot.cancel();
                             System.out.println("Appointment with Dr. " + docname + " on " + day + " at " + hour + ":00 has been canceled.");
                             return;  // Exit after successful cancellation
                         }
                     }
-                    System.out.println("No booked appointment found for " + hour + ":00 on " + day + ".");
+                    System.out.println("No booked appointment found for " + hour + ":00 on " + day + "for the patient with the id " + this.id + ".");
                     return;
                 } else {
                     System.out.println("No schedule available for " + day + ".");

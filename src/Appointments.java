@@ -1,7 +1,6 @@
 import java.util.*;
 public class Appointments {
     public Map<String, List<TimeSlot>> schedule;
-    public int appId;
 
     public Appointments() {
         schedule = new HashMap<>();
@@ -28,7 +27,7 @@ public class Appointments {
         }
     }
 
-    public void bookAppointment(String day, int hour) {
+    public void bookAppointment(String day, int hour, int patid) {
         List<TimeSlot> timeSlots = schedule.get(day.toLowerCase());
         if (timeSlots == null) {
             System.out.println("No appointments available for " + day + ".");
@@ -38,6 +37,7 @@ public class Appointments {
         for (TimeSlot slot : timeSlots) {
             if (slot.getHour() == hour) {
                 slot.book();
+                slot.appointmentId=patid;
                 System.out.println("Appointment booked for " + day + " at " + hour + ":00.");
                 return;
             }

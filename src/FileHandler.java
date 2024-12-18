@@ -150,12 +150,13 @@ public class FileHandler {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
-                if (fields.length != 4) continue;
+                if (fields.length != 5) continue;
 
                 String fname = fields[0];
                 String day = fields[1];
                 int hour = Integer.parseInt(fields[2]);
                 boolean notBooked = fields[3].equalsIgnoreCase("Booked");
+                int appoid = Integer.parseInt(fields[4]);
 
                 // Find the doctor by username
                 for (Doctor doctor : doctors) {
@@ -171,6 +172,7 @@ public class FileHandler {
                         if (notBooked) {
                             newSlot.book(); // Mark as booked
                         }
+                        newSlot.appointmentId=appoid;
                         timeSlots.add(newSlot);
                         break;
                     }
@@ -232,7 +234,7 @@ public class FileHandler {
                     List<TimeSlot> timeSlots = entry.getValue();
 
                     for (TimeSlot slot : timeSlots) {
-                        writer.write(doctor.getFirst_name() + "," + day + "," + slot.getHour() + "," + (slot.isBooked() ? "Booked" : "Available"));
+                        writer.write(doctor.getFirst_name() + "," + day + "," + slot.getHour() + "," + (slot.isBooked() ? "Booked" : "Available") + "," + slot.appointmentId);
                         writer.newLine();
                     }
                 }

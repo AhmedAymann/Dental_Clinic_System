@@ -1,5 +1,6 @@
 public class TimeSlot {
     private int hour;
+    int appointmentId;
     private boolean isBooked;
 
     public TimeSlot(int hour) {
@@ -27,9 +28,14 @@ public class TimeSlot {
         if (isBooked) {
             isBooked = false;
             System.out.println("The appointment has been successfully canceled.");
+            appointmentId=0;
         } else {
             System.out.println("This time slot is already available.");
         }
+    }
+
+    public int getAppointmentId() {
+        return appointmentId;
     }
 
     @Override
