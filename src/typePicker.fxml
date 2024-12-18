@@ -14,7 +14,7 @@
             <Image url="@Resources/assets/dental_bg.jpg" />
          </image>
       </ImageView>
-      <Button layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#handleDoctorButton" prefHeight="51.0" prefWidth="191.0" stylesheets="@Resources/styles/styles.css" text="Doctor" />
+      <Button layoutX="210.0" layoutY="154.0" mnemonicParsing="false" onAction="#DoctorSignPage" prefHeight="51.0" prefWidth="191.0" stylesheets="@Resources/styles/styles.css" text="Doctor" />
       <Button layoutX="208.0" layoutY="240.0" mnemonicParsing="false" onAction="#handleReceptionistButton" prefHeight="51.0" prefWidth="191.0" stylesheets="@Resources/styles/styles.css" text="Receptionist" />
       <Button layoutX="210.0" layoutY="328.0" mnemonicParsing="false" onAction="#handlePatientButton" prefHeight="51.0" prefWidth="191.0" stylesheets="@Resources/styles/styles.css" text="Patient" />
       <Label alignment="CENTER" layoutX="36.0" layoutY="23.0" prefHeight="63.0" prefWidth="539.0" stylesheets="@Resources/styles/styles.css" text="Welcome to Bright Smile Clinic ">
