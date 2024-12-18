@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0" styleClass="Anchor-pane" stylesheets="@Resources/styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <children>
+        <Button fx:id="myButton1" layoutX="566.0" layoutY="799.0" onAction="#handleSignUp" prefHeight="46.0" prefWidth="207.0" text="Sign Up" textFill="WHITE" />
+        <ToolBar prefHeight="90.0" prefWidth="1400.0">
+            <items>
+                <TextField styleClass="title" />
+                <TextField alignment="CENTER" editable="false" prefHeight="73.0" prefWidth="497.0" styleClass="title" text="DENTAL MANGEMENT SYSTEM" />
+            </items></ToolBar>
+        <Label layoutX="116.0" layoutY="163.0" prefHeight="38.0" prefWidth="182.0" text="First-Name">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <TextField fx:id="firstNameField" layoutX="116.0" layoutY="201.0" prefHeight="46.0" prefWidth="429.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <TextField alignment="CENTER" editable="false" layoutX="464.0" layoutY="90.0" styleClass="title" text="SignUp" />
+        <Label layoutX="116.0" layoutY="268.0" prefHeight="38.0" prefWidth="152.0" text="Last-Name">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <TextField fx:id="lastNameField" layoutX="116.0" layoutY="314.0" prefHeight="46.0" prefWidth="429.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <Label layoutX="116.0" layoutY="381.0" prefHeight="38.0" prefWidth="152.0" text="E-mail">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <TextField fx:id="emailField" layoutX="116.0" layoutY="427.0" prefHeight="46.0" prefWidth="429.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <TextField editable="false" layoutX="116.0" layoutY="473.0" prefHeight="25.0" prefWidth="239.0" styleClass="trfield" text="make sure to use valid email">
+            <font>
+                <Font name="Arial" size="13.0" />
+            </font>
+        </TextField>
+        <Label layoutX="116.0" layoutY="499.0" prefHeight="38.0" prefWidth="247.0" text="Mobile Number">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <TextField fx:id="mobileNumberField" layoutX="116.0" layoutY="537.0" prefHeight="46.0" prefWidth="429.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <Label layoutX="772.0" layoutY="163.0" prefHeight="38.0" prefWidth="182.0" text="UserName">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <Label layoutX="772.0" layoutY="268.0" prefHeight="38.0" prefWidth="152.0" text="Password">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <TextField fx:id="usernameField" layoutX="772.0" layoutY="201.0" prefHeight="46.0" prefWidth="429.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <CheckBox fx:id="checkBox1" layoutX="773.0" layoutY="679.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="164.0" text="Male" textFill="RED">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </CheckBox>
+        <CheckBox fx:id="checkBox2" layoutX="911.0" layoutY="679.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="164.0" text="Female" textFill="RED">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </CheckBox>
+        <Label layoutX="772.0" layoutY="625.0" prefHeight="38.0" prefWidth="152.0" text="Gender" textFill="#0d0a0a">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="passwordField" layoutX="772.0" layoutY="314.0" prefHeight="46.0" prefWidth="429.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </PasswordField>
+        <Label layoutX="772.0" layoutY="389.0" prefHeight="38.0" prefWidth="152.0" text="Age">
+            <font>
+                <Font size="26.0" />
+            </font>
+        </Label>
+        <TextField fx:id="ageField" layoutX="772.0" layoutY="440.0" prefHeight="46.0" prefWidth="429.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+      <Label layoutX="116.0" layoutY="602.0" prefHeight="38.0" prefWidth="247.0" text="Weight">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <TextField fx:id="patientWeightField" layoutX="116.0" layoutY="640.0" prefHeight="46.0" prefWidth="429.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Label layoutX="772.0" layoutY="499.0" prefHeight="38.0" prefWidth="152.0" text="Blood type">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <TextField fx:id="patientBoodTypeField" layoutX="772.0" layoutY="550.0" prefHeight="46.0" prefWidth="429.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Label layoutX="116.0" layoutY="715.0" prefHeight="38.0" prefWidth="247.0" text="prescription">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <TextField fx:id="patientPrescriptionField" layoutX="116.0" layoutY="753.0" prefHeight="46.0" prefWidth="429.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+    </children>
+</AnchorPane>
