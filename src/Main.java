@@ -4,15 +4,14 @@
 //import javafx.scene.Scene;
 //import javafx.stage.Stage;
 
+
 import java.util.ArrayList;
+import java.lang.*;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main{
-
-
-
+public class Main {
 
 
     public static void main(String[] args) {
@@ -20,51 +19,103 @@ public class Main{
 //        launch(args);
 
         // Lists
-        List<Doctor> doctors = new ArrayList<>();
-        List<Patients> patients = new ArrayList<>();
-        List<Receptionist> receptionists = new ArrayList<>();
-
+//        List<Doctor> doctors = new ArrayList<>();
+//        List<Patients> patients = new ArrayList<>();
+//        List<Receptionist> receptionists = new ArrayList<>();
+        List<DentalClinic> dentalClinics = new ArrayList<>();
 
         //load and delete(for now)
-        FileHandler handler1= new FileHandler(doctors,patients,receptionists);
-//        handler1.delete();
-//         Dental clinic declaration
-        DentalClinic bright_smile = new DentalClinic("New Cairo", doctors, patients, receptionists);
+//            FileHandler handler1 = new FileHandler(DC.doctorList, DC.patientsList, DC.receptionistList);
 
+//         Dental clinic declaration
+        DentalClinic bright_smile = new DentalClinic("New Cairo","Bright Smile", "Dental services", 50000);
+        DentalClinic white_teeth = new DentalClinic("Nasr City","White Teeth", "Dental services", 40000);
+        DentalClinic tooth_brush = new DentalClinic("Masr el Gededa","Tooth Brush", "Dental services", 30000);
+        DentalClinic golden_tooth = new DentalClinic("Mokatam","Golden Tooth", "Dental services", 25000);
+        dentalClinics.add(bright_smile);
+        dentalClinics.add(white_teeth);
+        dentalClinics.add(tooth_brush);
+        dentalClinics.add(golden_tooth);
+        DentalClinic DC = new DentalClinic();
+
+        FileHandler handler1 = new FileHandler(dentalClinics);
         // User management declaration
         UserManager userManager = new UserManager();
 
         // Main UI
         Scanner scanner = new Scanner(System.in);
         boolean a = true;
-        try{ // main try (code entry)
+//        try {// main try (code entry)
+
             while (a) {
-                System.out.println("Welcome to Bright Smile Clinic!");
-                System.out.println("1: Doctor");
-                System.out.println("2: Patient");
-                System.out.println("3: Receptionist");
-                System.out.println("4: Close application");
-                int choice1 = 0;
+                boolean b = true;
+                boolean c = true;
+                boolean s = true;
+                while (s) {
+                    System.out.println("enter which dental clinic you want: ");
+                    System.out.println("1:bright smile\n2:White teeth\n3:Tooth brush\n4:Golden tooth\n5:Close");
+                    int dchoice = scanner.nextInt();
+                    scanner.nextLine();
 
-                boolean validInput = false;
-
-                while (!validInput) {
-                    try {
-                        System.out.print("Enter your choice: ");
-                        choice1 = scanner.nextInt();
-                        scanner.nextLine();// Attempt to read an integer
-                        if(choice1 > 4 && choice1 < 1){
-                            validInput = false;
-                        }else{
-                        validInput = true; // Input is valid, exit the loop
-                        }
-                    } catch (InputMismatchException e) {
-                        System.out.println("Invalid input! That's not an integer.");
-                        scanner.next(); // Clear the invalid input from the buffer
+                    switch (dchoice) {
+                        case 1:
+                            DC = bright_smile;
+                            s = false;
+                            break;
+                        case 2:
+                            DC = white_teeth;
+                            s = false;
+                            break;
+                        case 3:
+                            DC = tooth_brush;
+                            s = false;
+                            break;
+                        case 4:
+                            DC = golden_tooth;
+                            s = false;
+                            break;
+                        case 5:
+                            s=false;
+                            a=false;
+                            b=false;
+                            c=false;
+                            break;
+                        default:
+                            System.out.println("invalid choice!");
                     }
                 }
+
+                boolean validInput = false;
+                int choice1 = 0;
+
+                while(c)
+                {
+                    System.out.println("Welcome to "+DC.name+ " Clinic!");
+                    System.out.println("1: Doctor");
+                    System.out.println("2: Patient");
+                    System.out.println("3: Receptionist");
+                    System.out.println("4: Close application");
+
+
+                    while (!validInput) {
+                        try
+                        {
+                            System.out.print("Enter your choice: ");
+                            choice1 = scanner.nextInt();
+                            scanner.nextLine();// Attempt to read an integer
+                            if (choice1 > 4 && choice1 < 1) {
+                                validInput = false;
+                            } else {
+                                validInput = true; // Input is valid, exit the loop
+                            }
+                            c=false;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input! That's not an integer.");
+                            scanner.next(); // Clear the invalid input from the buffer
+                        }
+                    }
                 validInput = false;
-                boolean b = true;
+                }
 
                 while (b) {
                     switch (choice1) {
@@ -86,14 +137,13 @@ public class Main{
                             validInput = false;
 
 
-
                             Doctor logged_doctor = null;
                             if (choice2 == 2) {
                                 Doctor doctor = userManager.doctor_signup();
-                                doctors.add(doctor);
-                                logged_doctor = userManager.doctor_login(doctors);
+                                DC.doctorList.add(doctor);
+                                logged_doctor = userManager.doctor_login(DC.doctorList);
                             } else {
-                                logged_doctor = userManager.doctor_login(doctors);
+                                logged_doctor = userManager.doctor_login(DC.doctorList);
                             }
 
                             if (logged_doctor != null) {
@@ -125,19 +175,19 @@ public class Main{
 
                                     switch (doctorAction) {
                                         case 1:
-                                            logged_doctor.create_prescription(patients);
+                                            logged_doctor.create_prescription(DC.patientsList);
                                             break;
                                         case 2:
                                             logged_doctor.show_appointments();
                                             break;
                                         case 3:
-                                            logged_doctor.get_recep_info(receptionists);
+                                            logged_doctor.get_recep_info(DC.receptionistList);
                                             break;
                                         case 4:
-                                            logged_doctor.get_patients_info(patients);
+                                            logged_doctor.get_patients_info(DC.patientsList);
                                             break;
                                         case 5:
-                                            logged_doctor.show_patient_history(patients);
+                                            logged_doctor.show_patient_history(DC.patientsList);
                                             break;
                                         case 6:
                                             logged_doctor.Add_availability();
@@ -179,10 +229,10 @@ public class Main{
                             Patients logged_patient = null;
                             if (choice3 == 2) {
                                 Patients patient = userManager.patient_signup();
-                                patients.add(patient);
-                                logged_patient = userManager.patient_login(patients);
+                                DC.patientsList.add(patient);
+                                logged_patient = userManager.patient_login(DC.patientsList);
                             } else {
-                                logged_patient = userManager.patient_login(patients);
+                                logged_patient = userManager.patient_login(DC.patientsList);
                             }
 
                             if (logged_patient != null) {
@@ -212,25 +262,24 @@ public class Main{
                                     validInput = false;
 
 
-
                                     switch (patient_action) {
                                         case 1:
                                             logged_patient.change_info();
                                             break;
                                         case 2:
-                                            logged_patient.reserve_appointment(doctors);
+                                            logged_patient.reserve_appointment(DC.doctorList);
                                             break;
                                         case 3:
-                                            logged_patient.cancel_reservation(doctors);
+                                            logged_patient.cancel_reservation(DC.doctorList);
                                             break;
                                         case 4:
-                                            logged_patient.check_prices(doctors);
+                                            logged_patient.check_prices(DC.doctorList);
                                             break;
                                         case 5:
-                                            logged_patient.search_doctor(doctors);
+                                            logged_patient.search_doctor(DC.doctorList);
                                             break;
                                         case 6:
-                                            logged_patient.display_available_appointments(doctors);
+                                            logged_patient.display_available_appointments(DC.doctorList);
                                             break;
                                         case 7:
                                             patient_loop = false;
@@ -266,10 +315,10 @@ public class Main{
                             Receptionist logged_receptionist = null;
                             if (choice4 == 2) {
                                 Receptionist receptionist = userManager.receptionist_signup();
-                                receptionists.add(receptionist);
-                                logged_receptionist = userManager.receptionist_login(receptionists);
+                                DC.receptionistList.add(receptionist);
+                                logged_receptionist = userManager.receptionist_login(DC.receptionistList);
                             } else {
-                                logged_receptionist = userManager.receptionist_login(receptionists);
+                                logged_receptionist = userManager.receptionist_login(DC.receptionistList);
                             }
 
                             if (logged_receptionist != null) {
@@ -297,13 +346,13 @@ public class Main{
 
                                     switch (receptionist_action) {
                                         case 1:
-                                            logged_receptionist.changeinfo(patients);
+                                            logged_receptionist.changeinfo(DC.patientsList);
                                             break;
                                         case 2:
-                                            logged_receptionist.reserve_appointment(doctors, patients);
+                                            logged_receptionist.reserve_appointment(DC.doctorList, DC.patientsList);
                                             break;
                                         case 3:
-                                            logged_receptionist.cancel_appointment(doctors, patients);
+                                            logged_receptionist.cancel_appointment(DC.doctorList, DC.patientsList);
                                             break;
                                         case 4:
                                             receptionist_loop = false;
@@ -332,10 +381,9 @@ public class Main{
                 }
             }
 
-        } finally {
+
+//            FileHandler handler1 =new FileHandler()
             handler1.delete();
             handler1.saveData();
         }
     }
-
-}

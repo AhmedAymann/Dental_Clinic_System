@@ -60,8 +60,10 @@ public class Receptionist extends Users{
                         if(pat.getId()==patientid){
                             System.out.println("Enter new weight: ");
                             pat.weight= scanner.nextInt();
+                            scanner.nextLine();
                             System.out.println("Enter new height: ");
                             pat.height=scanner.nextInt();
+                            scanner.nextLine();
                         }
                     }
                     a=false;
@@ -84,7 +86,7 @@ public class Receptionist extends Users{
         int patid=0;
         boolean validInput=false;
         while (!validInput) {
-            System.out.println("Enter patient's id to cancel an appointment:");
+            System.out.println("Enter patient's id to add an appointment to:");
             try {
                 patid = scanner.nextInt();
                 scanner.nextLine();// Attempt to read an integer
@@ -104,6 +106,7 @@ public class Receptionist extends Users{
                     String day = scanner.nextLine();
                     System.out.print("Enter the hour to book: ");
                     int hour = scanner.nextInt();
+                    scanner.nextLine();
                     doctor.appointments.bookAppointment(day,hour, patid);
                 }
                 break;

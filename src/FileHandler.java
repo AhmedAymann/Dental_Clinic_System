@@ -12,8 +12,11 @@ public class FileHandler {
     private List<Doctor> doctors;
     private List<Patients> patients;
     private List<Receptionist> receptionists;
+    private List<DentalClinic> dentalClinics;
 
-    public FileHandler() {
+    public FileHandler(List<DentalClinic> d)
+    {
+        this.dentalClinics = d;
         doctors = new ArrayList<>();
         patients = new ArrayList<>();
         receptionists = new ArrayList<>();
@@ -78,7 +81,14 @@ public class FileHandler {
                 String password = fields[6];
                 String specialization = fields[7];
                 int app_price = Integer.parseInt(fields[8]);
-                doctors.add(new Doctor(username, password, First_name, Last_name, Email, Mobile_number, age, gender, specialization, app_price));
+                String cname = fields[9];
+                for(DentalClinic dc: dentalClinics)
+                {
+                    if(dc.name.equals(cname))
+                    {
+                        dc.doctorList.add(new Doctor(username, password, First_name, Last_name, Email, Mobile_number, age, gender, specialization, app_price));
+                    }
+                }
             }
         } catch (IOException e) {
             System.out.println("Error loading doctors data: " + e.getMessage());
@@ -103,7 +113,13 @@ public class FileHandler {
                 String blood_type = fields[9];
                 int id = Integer.parseInt(fields[10]);
                 List<String> history = getStrings(fields);
-                patients.add(new Patients(username, password, First_name, Last_name, Email, Mobile_number, age, gender, weight, height, blood_type, id, history));
+                String cname = fields[12];
+                for(DentalClinic dc: dentalClinics)
+                {
+                    if (dc.name.equals(cname)){
+                    dc.patientsList.add(new Patients(username, password, First_name, Last_name, Email, Mobile_number, age, gender, weight, height, blood_type, id, history));
+                    }
+                }
             }
         } catch (IOException e) {
             System.out.println("Error loading patients data: " + e.getMessage());
@@ -138,6 +154,14 @@ public class FileHandler {
                 String gender = fields[4];
                 String Mobile_number = fields[5];
                 String password = fields[6];
+                String cname = fields[7];
+                for(DentalClinic dc: dentalClinics)
+                {
+                    if (dc.name.equals(cname))
+                    {
+                    dc.receptionistList.add(new Receptionist(username, password, First_name, Last_name, Email, Mobile_number, age, gender));
+                    }
+                }
                 receptionists.add(new Receptionist(username, password, First_name, Last_name, Email, Mobile_number, age, gender));
             }
         } catch (IOException e) {
@@ -150,31 +174,38 @@ public class FileHandler {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
-                if (fields.length != 5) continue;
+                if (fields.length != 6) continue;
 
                 String fname = fields[0];
                 String day = fields[1];
                 int hour = Integer.parseInt(fields[2]);
                 boolean notBooked = fields[3].equalsIgnoreCase("Booked");
                 int appoid = Integer.parseInt(fields[4]);
+                String cname = fields[5];
 
                 // Find the doctor by username
-                for (Doctor doctor : doctors) {
-                    if (doctor.getFirst_name().equals(fname)) {
-                        // Add day if not present
-                        if (!doctor.appointments.schedule.containsKey(day.toLowerCase())) {
-                            doctor.appointments.schedule.put(day.toLowerCase(), new ArrayList<>());
-                        }
+                for(DentalClinic dc: dentalClinics)
+                {
+                    if (dc.name.equals(cname))
+                    {
+                        for (Doctor doctor : dc.doctorList) {
+                            if (doctor.getFirst_name().equals(fname)) {
+                                // Add day if not present
+                                if (!doctor.appointments.schedule.containsKey(day.toLowerCase())) {
+                                    doctor.appointments.schedule.put(day.toLowerCase(), new ArrayList<>());
+                                }
 
-                        // Add the time slot
-                        List<TimeSlot> timeSlots = doctor.appointments.schedule.get(day.toLowerCase());
-                        TimeSlot newSlot = new TimeSlot(hour);
-                        if (notBooked) {
-                            newSlot.book(); // Mark as booked
+                                // Add the time slot
+                                List<TimeSlot> timeSlots = doctor.appointments.schedule.get(day.toLowerCase());
+                                TimeSlot newSlot = new TimeSlot(hour);
+                                if (notBooked) {
+                                    newSlot.book(); // Mark as booked
+                                }
+                                newSlot.appointmentId=appoid;
+                                timeSlots.add(newSlot);
+                                break;
+                            }
                         }
-                        newSlot.appointmentId=appoid;
-                        timeSlots.add(newSlot);
-                        break;
                     }
                 }
             }
@@ -194,10 +225,11 @@ public class FileHandler {
 
     private void saveDoctors() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DOCTOR_FILE))) {
-            for (Doctor doctor : doctors) {
-                writer.write(doctor.getFirst_name() + "," + doctor.getLast_name() + "," + doctor.getEmail() + "," + doctor.getAge() + "," + doctor.getGender() + "," + doctor.getMobile_number() + "," + doctor.getPassword() + "," + doctor.getSpecialization() + "," + doctor.getAppointment_price());
-                writer.newLine();
-            }
+            for(DentalClinic dc: dentalClinics)
+                for (Doctor doctor : dc.doctorList) {
+                    writer.write(doctor.getFirst_name() + "," + doctor.getLast_name() + "," + doctor.getEmail() + "," + doctor.getAge() + "," + doctor.getGender() + "," + doctor.getMobile_number() + "," + doctor.getPassword() + "," + doctor.getSpecialization() + "," + doctor.getAppointment_price() + "," + dc.name);
+                    writer.newLine();
+                }
         } catch (IOException e) {
             System.out.println("Error saving doctors data: " + e.getMessage());
         }
@@ -205,20 +237,25 @@ public class FileHandler {
 
     private void savePatients() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(PATIENT_FILE))) {
-            for (Patients patient : patients) {
-                writer.write(patient.getFirst_name() + "," + patient.getLast_name() + "," + patient.getEmail() + "," + patient.getAge() + "," + patient.getGender() + "," + patient.getMobile_number() + "," + patient.getPassword() + "," + patient.getWeight() + "," + patient.getHeight() + "," + patient.getBlood_type() + "," + patient.getId() + "," + patient.getHistory());
-                writer.newLine();
+            for(DentalClinic dc: dentalClinics) {
+                for (Patients patient : dc.patientsList) {
+                    writer.write(patient.getFirst_name() + "," + patient.getLast_name() + "," + patient.getEmail() + "," + patient.getAge() + "," + patient.getGender() + "," + patient.getMobile_number() + "," + patient.getPassword() + "," + patient.getWeight() + "," + patient.getHeight() + "," + patient.getBlood_type() + "," + patient.getId() + "," + patient.getHistory() + "," + dc.name);
+                    writer.newLine();
+                }
             }
         } catch (IOException e) {
-            System.out.println("Error saving patients data: " + e.getMessage());
+        System.out.println("Error saving patients data: " + e.getMessage());
         }
     }
 
     private void saveReceptionists() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RECEPTIONIST_FILE))) {
-            for (Receptionist receptionist : receptionists) {
-                writer.write(receptionist.getFirst_name() + "," + receptionist.getLast_name() + "," + receptionist.getEmail() + "," + receptionist.getAge() + "," + receptionist.getGender() + "," + receptionist.getMobile_number() + "," + receptionist.getPassword());
-                writer.newLine();
+            for(DentalClinic dc: dentalClinics){
+                for (Receptionist receptionist : dc.receptionistList)
+                {
+                        writer.write(receptionist.getFirst_name() + "," + receptionist.getLast_name() + "," + receptionist.getEmail() + "," + receptionist.getAge() + "," + receptionist.getGender() + "," + receptionist.getMobile_number() + "," + receptionist.getPassword() + "," + dc.name);
+                        writer.newLine();
+                }
             }
         } catch (IOException e) {
             System.out.println("Error saving receptionists data: " + e.getMessage());
@@ -228,14 +265,16 @@ public class FileHandler {
     private void saveAppointments() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(APPOINTMENT_FILE))) {
             // Write appointments for each doctor
-            for (Doctor doctor : doctors) {
-                for (Map.Entry<String, List<TimeSlot>> entry : doctor.appointments.schedule.entrySet()) {
-                    String day = entry.getKey();
-                    List<TimeSlot> timeSlots = entry.getValue();
+            for(DentalClinic dc: dentalClinics){
+                for (Doctor doctor : dc.doctorList) {
+                    for (Map.Entry<String, List<TimeSlot>> entry : doctor.appointments.schedule.entrySet()) {
+                        String day = entry.getKey();
+                        List<TimeSlot> timeSlots = entry.getValue();
 
-                    for (TimeSlot slot : timeSlots) {
-                        writer.write(doctor.getFirst_name() + "," + day + "," + slot.getHour() + "," + (slot.isBooked() ? "Booked" : "Available") + "," + slot.appointmentId);
-                        writer.newLine();
+                        for (TimeSlot slot : timeSlots) {
+                            writer.write(doctor.getFirst_name() + "," + day + "," + slot.getHour() + "," + (slot.isBooked() ? "Booked" : "Available") + "," + slot.appointmentId + "," + dc.name);
+                            writer.newLine();
+                        }
                     }
                 }
             }
@@ -244,55 +283,3 @@ public class FileHandler {
         }
     }
 }
-//import java.io.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class FileHandler {
-//
-//    private static final String DOCTORS_FILE = "doctors.dat";
-//    private static final String PATIENTS_FILE = "patients.dat";
-//    private static final String RECEPTIONISTS_FILE = "receptionists.dat";
-//
-//    public void saveData(List<Doctor> doctors, List<Patients> patients, List<Receptionist> receptionists) {
-//        saveListToFile(doctors, DOCTORS_FILE);
-//        saveListToFile(patients, PATIENTS_FILE);
-//        saveListToFile(receptionists, RECEPTIONISTS_FILE);
-//    }
-//
-//    public List<Doctor> loadDoctors() {
-//        return loadListFromFile(DOCTORS_FILE);
-//    }
-//
-//    public List<Patients> loadPatients() {
-//        return loadListFromFile(PATIENTS_FILE);
-//    }
-//
-//    public List<Receptionist> loadReceptionists() {
-//        return loadListFromFile(RECEPTIONISTS_FILE);
-//    }
-//
-//    private <T> void saveListToFile(List<T> list, String fileName) {
-//        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
-//            oos.writeObject(list);
-//        } catch (IOException e) {
-//            System.err.println("Error saving to file: " + fileName);
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @SuppressWarnings("unchecked")
-//    private <T> List<T> loadListFromFile(String fileName) {
-//        File file = new File(fileName);
-//        if (!file.exists()) {
-//            return new ArrayList<>(); // Return empty list if file does not exist
-//        }
-//        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
-//            return (List<T>) ois.readObject();
-//        } catch (IOException | ClassNotFoundException e) {
-//            System.err.println("Error loading from file: " + fileName);
-//            e.printStackTrace();
-//            return new ArrayList<>();
-//        }
-//    }
-//}

@@ -1,9 +1,5 @@
-admin,sunday,9,Booked,2
-admin,sunday,11,Booked,1
-admin,sunday,1,Available,0
-boody,tuesday,1,Booked,3
-boody,tuesday,2,Available,0
-boody,monday,1,Available,0
-boody,monday,2,Available,0
-boody,monday,3,Booked,4
-boody,monday,4,Available,0
+a,sunday,1,Available,0,Bright Smile
+a,sunday,2,Available,0,Bright Smile
+a,sunday,3,Booked,1,Bright Smile
+a,sunday,4,Available,0,Bright Smile
+a,sunday,5,Available,0,Bright Smile

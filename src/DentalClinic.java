@@ -2,18 +2,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DentalClinic{
+    String name;
     String Location;
-    List<String>Services;
-    List<Integer> prices;
-    List<Doctor> doctorList;
-    List<Patients> patientsList;
-    List<Receptionist> receptionistList;
+    String Services;
+    int RentPrice;
+    List<Doctor> doctorList = new ArrayList<>();
+    List<Patients> patientsList = new ArrayList<>();
+    List<Receptionist> receptionistList = new ArrayList<>();
 
-    public DentalClinic(String Location,List<Doctor> doctors,List<Patients> patients, List<Receptionist> receptionists){
+    public DentalClinic(String Location, String name, String serv, int Rent){
+        this.name=name;
         this.Location=Location;
-        this.doctorList=doctors;
-        this.patientsList=patients;
-        this.receptionistList=receptionists;
+        this.Services=serv;
+        this.RentPrice=Rent;
     }
-
+    public DentalClinic(){
+    }
 }
